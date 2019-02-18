@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Assistive Software</string>
+    <string name="button_check">Check</string>
+    <string name="button_speak">Speak</string>
 </resources>
