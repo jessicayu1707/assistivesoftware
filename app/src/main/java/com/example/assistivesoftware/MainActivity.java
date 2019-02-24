@@ -3,15 +3,10 @@ package com.example.assistivesoftware;
 import android.content.Context;
 import android.content.Intent;
 import android.speech.tts.TextToSpeech;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     static int MY_DATA_CHECK_CODE = 1; //from example
-    public void checkTTS(View view){
+    public void checkTTS(View view) {
         Context context = getApplicationContext();
         CharSequence text = "Hello Check!";
         int duration = Toast.LENGTH_SHORT;
@@ -37,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         //onActivityResult(MY_DATA_CHECK_CODE,resultCode,checkIntent);
     }
 
+    //initialising tts (to do) with required language from dropdown
     private TextToSpeech mTts;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -66,17 +62,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //called when user taps on the button
-    public void speakTTS(View view){
+    //pops up toast and speaks text
+    public void speakTTS(View view) {
         //do something in response to clicking send button
         Context context = getApplicationContext();
-        CharSequence text = "Hello speak tts!";
+        CharSequence text = "Hello I am talking. Can you hear me?";
         int duration = Toast.LENGTH_SHORT;
 
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
-        String toSpeak = "Hello I am working.";
+        String toSpeak = "Hello I am talking. Can you hear me?";
         mTts.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null);
 
+        //doesn't need intent to work
         //make intent (where does it go?)
         //Intent intent = new Intent(this, Accessibility.class);
         //start the intent
