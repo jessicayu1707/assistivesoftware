@@ -6,16 +6,57 @@ import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Getting the instance of Spinner and applying OnItemSelectedListener on it
+        Spinner spinner = findViewById(R.id.spinner);
+        spinner.setOnItemSelectedListener(this);
+
+        //Creating the ArrayAdapter instance
+        ArrayAdapter aa = ArrayAdapter.createFromResource(this,
+                R.array.language_array, android.R.layout.simple_spinner_item);
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        //Setting the ArrayAdapter data on the Spinner
+        spinner.setAdapter(aa);
     }
+    //Performing action onItemSelected and onNothing selected
+    @Override
+    public void onItemSelected(AdapterView<?> arg0, View arg1, int position,long id) {
+        //make array from language array in resources
+        String[] language_array = getResources().getStringArray(R.array.language_array);
+        String text = language_array[position];
+        TextView textView = findViewById(R.id.textView);
+        textView.setText(text); //set text for text view
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> arg0) {
+// TODO Auto-generated method stub
+
+    }
+
+
+//    public void dropdown(View view){
+//        Spinner spinner = (Spinner)findViewById(R.id.spinner);
+//        String text = spinner.getSelectedItem().toString();
+//        TextView textView = (TextView) findViewById(R.id.textView);
+//        textView.setText("from the code!!!"); //set text for text view
+//    }
 
     static int MY_DATA_CHECK_CODE = 1; //from example
     public void checkTTS(View view) {
