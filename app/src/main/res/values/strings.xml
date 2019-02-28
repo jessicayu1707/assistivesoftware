@@ -3,4 +3,5 @@
     <string name="button_check">Check</string>
     <string name="button_speak">Speak</string>
     <string name="text_view">Hello World!</string>
+    <string name="button_start">Start Service</string>
 </resources>

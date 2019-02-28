@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,11 +17,13 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
 
+    private Button button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //////Language Dropdown Menu///////
         //Getting the instance of Spinner and applying OnItemSelectedListener on it
         Spinner spinner = findViewById(R.id.spinner);
         spinner.setOnItemSelectedListener(this);
@@ -32,6 +35,18 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         //Setting the ArrayAdapter data on the Spinner
         spinner.setAdapter(aa);
+
+
+        ///////Start Service Button///////
+        button = (Button) findViewById(R.id.button_start);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startService(new Intent(MainActivity.this, FloatingWindow.class));
+            }
+        });
+
+
     }
     //Performing action onItemSelected and onNothing selected
     @Override
