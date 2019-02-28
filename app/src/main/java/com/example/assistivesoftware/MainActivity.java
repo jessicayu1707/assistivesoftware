@@ -50,14 +50,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
-
-//    public void dropdown(View view){
-//        Spinner spinner = (Spinner)findViewById(R.id.spinner);
-//        String text = spinner.getSelectedItem().toString();
-//        TextView textView = (TextView) findViewById(R.id.textView);
-//        textView.setText("from the code!!!"); //set text for text view
-//    }
-
+    //check for the presence of the TTS resources with the corresponding intent
     static int MY_DATA_CHECK_CODE = 1; //from example
     public void checkTTS(View view) {
         Context context = getApplicationContext();
@@ -70,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Intent checkIntent = new Intent();
         checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(checkIntent, MY_DATA_CHECK_CODE);
-        //onActivityResult(MY_DATA_CHECK_CODE,resultCode,checkIntent);
     }
 
     //initialising tts (to do) with required language from dropdown
@@ -115,10 +107,5 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         String toSpeak = "Hello I am talking. Can you hear me?";
         mTts.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null);
 
-        //doesn't need intent to work
-        //make intent (where does it go?)
-        //Intent intent = new Intent(this, Accessibility.class);
-        //start the intent
-        //startActivity(intent);
     }
 }
