@@ -1,7 +1,10 @@
 package com.example.assistivesoftware;
 
+
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +19,7 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
+    public static int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE= 789;
 
     private Button button;
     @Override
@@ -36,18 +40,39 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         //Setting the ArrayAdapter data on the Spinner
         spinner.setAdapter(aa);
 
+        ///////Overlay Permission///////
+        testPermission();
+
+
 
         ///////Start Service Button///////
         button = (Button) findViewById(R.id.button_start);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startService(new Intent(MainActivity.this, FloatingWindow.class));
+                //startService(new Intent(MainActivity.this, FloatingWindow.class));
             }
         });
 
 
     }
+
+    public void testPermission() {
+        if (!Settings.canDrawOverlays(this)) {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + getPackageName()));
+            startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE);
+        }
+    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (requestCode == ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE) {
+//            if (Settings.canDrawOverlays(this)) {
+//                // You have permission
+//            }
+//        }
+//    }
+
     //Performing action onItemSelected and onNothing selected
     @Override
     public void onItemSelected(AdapterView<?> arg0, View arg1, int position,long id) {
@@ -84,6 +109,19 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private TextToSpeech mTts;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE) {
+            if (Settings.canDrawOverlays(this)) {
+                // You have permission
+            }
+        }
+
+
+
+
+
+
+
         Context context = getApplicationContext();
         CharSequence text = "Hello! Im on activity result now!";
         int duration = Toast.LENGTH_SHORT;
