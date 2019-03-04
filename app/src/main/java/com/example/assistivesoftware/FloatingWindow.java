@@ -33,6 +33,7 @@ public class FloatingWindow extends Service {
     public void onCreate() {
         super.onCreate();
         //creating new window manager and linear layout
+        //adding stop button
         wm = (WindowManager) getSystemService(WINDOW_SERVICE);
         ll = new LinearLayout(this);
         stop = new Button(this);
@@ -99,6 +100,7 @@ public class FloatingWindow extends Service {
 
         });
 
+        //removes floating window when you press stop
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

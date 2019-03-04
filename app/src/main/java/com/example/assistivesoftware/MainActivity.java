@@ -47,8 +47,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         ///////Overlay Permission///////
         testPermission();
 
-
-
         ///////Start Service Button///////
         Button button;
         button = findViewById(R.id.button_start);
@@ -61,6 +59,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
     }
+
+    //occurs in onCreate()
+    //code to text the permission to draw over other apps
     @TargetApi(23)
     public void testPermission() {
         String text = "I'm on test permission method.";
@@ -105,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
+    //called when "Check" is clicked
     //check for the presence of the TTS resources with the corresponding intent
     static int MY_DATA_CHECK_CODE = 1; //from example
     public void checkTTS(View view) {
@@ -126,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @TargetApi(23)
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        //overlay permission activity result
         if (requestCode == ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE) {
             if (canDrawOverlays(this)) {
                 // You have permission
@@ -140,8 +143,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
 
-
-
+        //tts activity result
         Context context = getApplicationContext();
         CharSequence text = "Hello! Im on activity result now!";
         int duration = Toast.LENGTH_SHORT;
@@ -167,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
-    //called when user taps on the button
+    //called when user taps on the "Speak" button
     //pops up toast and speaks text
     public void speakTTS(View view) {
         //do something in response to clicking send button
