@@ -1,19 +1,29 @@
 package com.example.assistivesoftware;
 
+
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.Locale;
 
+import static android.provider.Settings.canDrawOverlays;
+
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+
+    public static int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE= 789;
 
 
     @Override
@@ -21,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //////Language Dropdown Menu///////
         //Getting the instance of Spinner and applying OnItemSelectedListener on it
         Spinner spinner = findViewById(R.id.spinner);
         spinner.setOnItemSelectedListener(this);
@@ -32,7 +43,52 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         //Setting the ArrayAdapter data on the Spinner
         spinner.setAdapter(aa);
+
+        ///////Overlay Permission///////
+        testPermission();
+
+        ///////Start Service Button///////
+        Button button;
+        button = findViewById(R.id.button_start);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startService(new Intent(MainActivity.this, FloatingWindow.class));
+            }
+        });
+
+
     }
+
+    //occurs in onCreate()
+    //code to text the permission to draw over other apps
+    @TargetApi(23)
+    public void testPermission() {
+        String text = "I'm on test permission method.";
+        TextView textView = findViewById(R.id.text);
+        TextView textView2 = findViewById(R.id.text2);
+        textView.setText(text);
+        if (!canDrawOverlays(this)) {
+            text = "CANNOT draw overlay";
+            textView2.setText(text);
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + getPackageName()));
+            startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE);
+        }
+        else {
+        text = "CAN draw overlay";
+        textView2.setText(text);
+        }
+    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (requestCode == ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE) {
+//            if (Settings.canDrawOverlays(this)) {
+//                // You have permission
+//            }
+//        }
+//    }
+
     //Performing action onItemSelected and onNothing selected
     @Override
     public void onItemSelected(AdapterView<?> arg0, View arg1, int position,long id) {
@@ -50,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
+    //called when "Check" is clicked
     //check for the presence of the TTS resources with the corresponding intent
     static int MY_DATA_CHECK_CODE = 1; //from example
     public void checkTTS(View view) {
@@ -68,7 +125,25 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     //initialising tts (to do) with required language from dropdown
     private TextToSpeech mTts;
     @Override
+    @TargetApi(23)
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        //overlay permission activity result
+        if (requestCode == ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE) {
+            if (canDrawOverlays(this)) {
+                // You have permission
+                Context context = getApplicationContext();
+                CharSequence text = "Hello! You have permission!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
+        }
+
+
+
+        //tts activity result
         Context context = getApplicationContext();
         CharSequence text = "Hello! Im on activity result now!";
         int duration = Toast.LENGTH_SHORT;
@@ -94,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
-    //called when user taps on the button
+    //called when user taps on the "Speak" button
     //pops up toast and speaks text
     public void speakTTS(View view) {
         //do something in response to clicking send button
