@@ -20,7 +20,7 @@ public class FloatingWindow extends Service {
 
     private WindowManager wm;
     private LinearLayout ll;
-    private Button stop;
+    private Button exit, play;
     //@androidx.annotation.Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -36,12 +36,15 @@ public class FloatingWindow extends Service {
         //adding stop button
         wm = (WindowManager) getSystemService(WINDOW_SERVICE);
         ll = new LinearLayout(this);
-        stop = new Button(this);
+        exit = new Button(this);
+        play = new Button(this);
 
         ViewGroup.LayoutParams btnParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
                                                                       ViewGroup.LayoutParams.WRAP_CONTENT);
-        stop.setText("Stop");
-        stop.setLayoutParams(btnParams);
+        exit.setText("Exit");
+        exit.setLayoutParams(btnParams);
+        play.setText("Play");
+        play.setLayoutParams(btnParams);
 
 
 
@@ -58,7 +61,7 @@ public class FloatingWindow extends Service {
         params.y = 0;
         params.gravity = Gravity.CENTER;
 
-        ll.addView(stop);
+        ll.addView(exit);
         wm.addView(ll, params);
 
         ll.setOnTouchListener(new View.OnTouchListener() {
@@ -101,11 +104,18 @@ public class FloatingWindow extends Service {
         });
 
         //removes floating window when you press stop
-        stop.setOnClickListener(new View.OnClickListener() {
+        exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 wm.removeView(ll);
                 stopSelf();
+            }
+        });
+
+        play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startService(new Intent(FloatingWindow.this, MyAccessibilityService.class));
             }
         });
 
