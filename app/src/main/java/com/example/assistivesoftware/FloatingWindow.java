@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
+import android.support.constraint.ConstraintLayout;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,7 +22,7 @@ public class FloatingWindow extends Service {
     private WindowManager wm;
     private LinearLayout ll;
     private Button exit, play;
-    //@androidx.annotation.Nullable
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -33,23 +34,30 @@ public class FloatingWindow extends Service {
     public void onCreate() {
         super.onCreate();
         //creating new window manager and linear layout
-        //adding stop button
+        //adding stop and play button
         wm = (WindowManager) getSystemService(WINDOW_SERVICE);
         ll = new LinearLayout(this);
         exit = new Button(this);
         play = new Button(this);
 
+        //set orientation of linearlayout to vertical
+        ll.setOrientation(LinearLayout.VERTICAL);
+
+
+        //parameters for the buttons
         ViewGroup.LayoutParams btnParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
                                                                       ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        //setting button text and params
         exit.setText("Exit");
         exit.setLayoutParams(btnParams);
         play.setText("Play");
         play.setLayoutParams(btnParams);
 
-
-
+        //parameter for linear layout
         LinearLayout.LayoutParams llParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                                                                            LinearLayout.LayoutParams.MATCH_PARENT);
+
         ll.setBackgroundColor(Color.argb(70, 115, 205, 255));
         ll.setLayoutParams(llParams);
 
@@ -61,7 +69,9 @@ public class FloatingWindow extends Service {
         params.y = 0;
         params.gravity = Gravity.CENTER;
 
+
         ll.addView(exit);
+        ll.addView(play);
         wm.addView(ll, params);
 
         ll.setOnTouchListener(new View.OnTouchListener() {

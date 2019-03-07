@@ -40,6 +40,8 @@ public class MyAccessibilityService extends AccessibilityService {
         if (source == null) {
             return;
         }
+
+
         Log.i("Event", event.toString());
         Log.i("Source", source.toString());
     }

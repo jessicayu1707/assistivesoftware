@@ -23,11 +23,12 @@
         <service android:name=".FloatingWindow" />
 
         <service android:name=".MyAccessibilityService"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+                 android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
-            <meta-data android:name="android.accessibilityservice" android:resource="@xml/accessconfig" />
+            <meta-data android:name="android.accessibilityservice"
+                       android:resource="@xml/accessconfig" />
         </service>
     </application>
 
