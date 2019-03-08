@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
-import android.support.constraint.ConstraintLayout;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -40,7 +39,7 @@ public class FloatingWindow extends Service {
         exit = new Button(this);
         play = new Button(this);
 
-        //set orientation of linearlayout to vertical
+        //set orientation of linear layout to vertical
         ll.setOrientation(LinearLayout.VERTICAL);
 
 
