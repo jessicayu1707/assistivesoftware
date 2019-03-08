@@ -47,16 +47,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         ///////Overlay Permission///////
         testPermission();
 
-        ///////Start Service Button///////
-        Button button;
-        button = findViewById(R.id.button_start);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startService(new Intent(MainActivity.this, FloatingWindow.class));
-            }
-        });
-
 
     }
 

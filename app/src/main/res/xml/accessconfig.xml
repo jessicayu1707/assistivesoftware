@@ -6,6 +6,5 @@
     android:settingsActivity="com.example.android.apis.accessibility.TestBackActivity"
     android:canRetrieveWindowContent="true"
     android:canRequestTouchExplorationMode="true"
-    android:packageNames="com.example.assistivesoftware"
 
      />
