@@ -4,7 +4,10 @@ import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -19,12 +22,19 @@ import android.widget.Toast;
 public class MyAccessibilityService extends AccessibilityService {
 
 
+
     FrameLayout ll;
+
+    TTSEngine tts = null;
 
     @SuppressLint("ClickableViewAccessibility")
     @TargetApi(24)
     @Override
     protected void onServiceConnected() {
+
+        tts = new TTSEngine();
+        tts.init(this);
+
 
         AccessibilityServiceInfo info = new AccessibilityServiceInfo();
         // Set the type of events that this service wants to listen to. Others won't be passed to this service.
@@ -45,6 +55,7 @@ public class MyAccessibilityService extends AccessibilityService {
         info.flags = AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS;
         info.flags = AccessibilityServiceInfo.FLAG_REQUEST_ENHANCED_WEB_ACCESSIBILITY;
         info.flags = AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS;
+        info.flags |= AccessibilityServiceInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS;
         //info.flags = AccessibilityServiceInfo.FLAG_REQUEST_TOUCH_EXPLORATION_MODE;
         //info.flags = AccessibilityServiceInfo.FLAG_REQUEST_ACCESSIBILITY_BUTTON;
         // We are keeping the timeout to 0 as we don’t need any delay or to pause our accessibility events
@@ -122,9 +133,20 @@ public class MyAccessibilityService extends AccessibilityService {
 
     }
 
+//    TTSEngine tts = null;
+//    private void ttsSpeak(String text) {
+//
+//        tts = new TTSEngine();
+//        tts.init(this);
+//        tts.talk(text);
+//    }
 
+
+    @TargetApi(16)
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
+
+        //AccessibilityNodeInfo source = event.getSource();
         final int eventType = event.getEventType();
         String eventText = null;
         switch (eventType) {
@@ -134,12 +156,24 @@ public class MyAccessibilityService extends AccessibilityService {
             case AccessibilityEvent.TYPE_VIEW_FOCUSED:
                 eventText = "Focused on";
                 break;
+
+//            case AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED:
+//                eventText = source.getText().toString();
+//                break;
         }
 
-        eventText = eventText + event.getText();
+        eventText = eventText + event.getText().toString();
         Toast.makeText(getApplicationContext(), eventText, Toast.LENGTH_LONG).show();
 
+
+        tts.addTalk(eventText);
+
+
+
     }
+
+
+
 
 //    private void configurePlayButton() {
 //        Button playButton = (Button) ll.findViewById(R.id.btnPlay);

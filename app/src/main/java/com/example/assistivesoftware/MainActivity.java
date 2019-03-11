@@ -23,7 +23,8 @@ import static android.provider.Settings.canDrawOverlays;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    public static int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE= 789;
+
+    TTSEngine tts = null;
 
 
     @Override
@@ -48,8 +49,27 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         testPermission();
 
 
+        ///////TTSEngine/////////
+        tts = new TTSEngine();
+        tts.init(this);
+        Button testButton = (Button) findViewById(R.id.btnTTSEngine);
+        testButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tts.talk("OMG! I work! You can hear me!");
+            }
+        });
+
+
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        tts.shutDown();
+    }
+
+    public static int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE= 789;
     //occurs in onCreate()
     //code to text the permission to draw over other apps
     @TargetApi(23)
@@ -98,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     //called when "Check" is clicked
     //check for the presence of the TTS resources with the corresponding intent
-    static int MY_DATA_CHECK_CODE = 1; //from example
+    static int MY_DATA_CHECK_CODE = 123; //from example
     public void checkTTS(View view) {
         Context context = getApplicationContext();
         CharSequence text = "Hello Check!";
@@ -112,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         startActivityForResult(checkIntent, MY_DATA_CHECK_CODE);
     }
 
+    //testing overlay permission
     //initialising tts (to do) with required language from dropdown
     private TextToSpeech mTts;
     @Override
@@ -162,13 +183,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     //called when user taps on the "Speak" button
     //pops up toast and speaks text
     public void speakTTS(View view) {
-        //do something in response to clicking send button
         Context context = getApplicationContext();
         CharSequence text = "Hello I am talking. Can you hear me?";
         int duration = Toast.LENGTH_SHORT;
-
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
+
         String toSpeak = "Hello I am talking. Can you hear me?";
         mTts.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null);
 
