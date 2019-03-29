@@ -1,12 +1,9 @@
 package com.example.assistivesoftware;
 
 
-import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.util.Locale;
 
-import static android.provider.Settings.canDrawOverlays;
+
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -45,14 +42,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         //Setting the ArrayAdapter data on the Spinner
         spinner.setAdapter(aa);
 
-        ///////Overlay Permission///////
-        testPermission();
 
 
         ///////TTSEngine/////////
         tts = new TTSEngine();
         tts.init(this);
-        Button testButton = (Button) findViewById(R.id.btnTTSEngine);
+        Button testButton = findViewById(R.id.btnTTSEngine);
         testButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,35 +64,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         tts.shutDown();
     }
 
-    public static int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE= 789;
-    //occurs in onCreate()
-    //code to text the permission to draw over other apps
-    @TargetApi(23)
-    public void testPermission() {
-        String text = "I'm on test permission method.";
-        TextView textView = findViewById(R.id.text);
-        TextView textView2 = findViewById(R.id.text2);
-        textView.setText(text);
-        if (!canDrawOverlays(this)) {
-            text = "CANNOT draw overlay";
-            textView2.setText(text);
-            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                    Uri.parse("package:" + getPackageName()));
-            startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE);
-        }
-        else {
-        text = "CAN draw overlay";
-        textView2.setText(text);
-        }
-    }
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (requestCode == ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE) {
-//            if (Settings.canDrawOverlays(this)) {
-//                // You have permission
-//            }
-//        }
-//    }
 
     //Performing action onItemSelected and onNothing selected
     @Override
@@ -138,19 +104,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     @TargetApi(23)
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        //overlay permission activity result
-        if (requestCode == ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE) {
-            if (canDrawOverlays(this)) {
-                // You have permission
-                Context context = getApplicationContext();
-                CharSequence text = "Hello! You have permission!";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
-            }
-        }
 
 
 
