@@ -14,15 +14,28 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.RequestBody;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
 
-    TTSEngine tts = null;
+    private TTSEngine tts = null;
+    private TranslateAPI translateAPI;
 
+    private TextView translatedText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +69,67 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         });
 
 
+        //////////Translation Test//////////
+
+        translatedText = findViewById(R.id.translatedText);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.cognitive.microsofttranslator.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        translateAPI = retrofit.create(TranslateAPI.class);
+
+        Button translateBtn = findViewById(R.id.translateBtn);
+
+        translateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               createTranslation();
+            }
+        });
+
     }
+
+    private void createTranslation() {
+
+        final InputText inputText = new InputText("egg");
+        List<InputText> inputTextList = new ArrayList<>();
+        inputTextList.add(inputText);
+
+        Call<List<TranslationResponse>> call = translateAPI.createTranslation(3.0, "zh-Hans", inputTextList);
+
+        call.enqueue(new Callback<List<TranslationResponse>>() {
+            @Override
+            public void onResponse(Call<List<TranslationResponse>> call, Response<List<TranslationResponse>> response) {
+
+                if(!response.isSuccessful()){
+                    translatedText.setText("Failed :( Code: " + response.code());
+                    return;
+                }
+
+                List<TranslationResponse> translationResponse = response.body();
+
+                String output = translationResponse.get(0).getTranslations().get(0).getText();
+
+                String content = "";
+                content += "Code: " + response.code() + "\n";
+                content += "Original Text:" + inputText.getText() + "\n";
+                content += "Translated to:" + translationResponse.get(0).getTranslations().get(0).getTo() + "\n";
+                content += "Translated Text:" + output + "\n\n";
+
+                translatedText.setText(content);
+
+            }
+
+            @Override
+            public void onFailure(Call<List<TranslationResponse>> call, Throwable t) {
+                translatedText.setText(t.getMessage());
+            }
+        });
+
+    }
+
 
     @Override
     public void onDestroy() {

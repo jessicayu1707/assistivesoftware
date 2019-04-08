@@ -126,6 +126,7 @@ public class MyAccessibilityService extends AccessibilityService {
             public void onClick(View v) {
                 wm.removeView(ll);
                 disableSelf();
+                tts.shutDown();
             }
         });
 
