@@ -4,7 +4,9 @@ import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -23,6 +25,13 @@ public class MyAccessibilityService extends AccessibilityService {
 
     TTSEngine tts = null;
 
+    private String languageCode;
+
+    public int onStartCommand (Intent intent, int flags, int startId){
+        languageCode = intent.getStringExtra("language_code");
+        return super.onStartCommand(intent, flags, startId);
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     @TargetApi(24)
     @Override
@@ -31,6 +40,7 @@ public class MyAccessibilityService extends AccessibilityService {
         //creating a new tts engine
         //initialising the tts
         tts = new TTSEngine();
+        tts.changeLocale(languageCode);
         tts.init(this);
 
 

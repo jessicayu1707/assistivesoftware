@@ -34,8 +34,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private TTSEngine tts = null;
     private TranslateAPI translateAPI;
-
     private TextView translatedText;
+
+    private String languageCode = "yue-Hant-HK";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,12 +60,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         ///////TTSEngine/////////
         tts = new TTSEngine();
+        tts.changeLocale(languageCode);
         tts.init(this);
         Button testButton = findViewById(R.id.btnTTSEngine);
         testButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tts.talk("OMG! I work! You can hear me!");
+                tts.talk("你好吗？我是余君儿!");
             }
         });
 
@@ -85,19 +87,31 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         translateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               createTranslation();
+                createTranslation("three eggs", "zh-Hans");
             }
         });
 
+
+
+        //settingLanguage(languageCode);
+        Intent intent = new Intent(MainActivity.this, MyAccessibilityService.class);
+        intent.putExtra("language_code", languageCode);
+        startService(intent);
+
     }
 
-    private void createTranslation() {
+    //saving the string languageCode for intended language to use across activities
+    public void settingLanguage(String languageCode){
 
-        final InputText inputText = new InputText("egg");
+    }
+
+    private void createTranslation(String text, String languageCode) {
+
+        final InputText inputText = new InputText(text);
         List<InputText> inputTextList = new ArrayList<>();
         inputTextList.add(inputText);
 
-        Call<List<TranslationResponse>> call = translateAPI.createTranslation(3.0, "zh-Hans", inputTextList);
+        Call<List<TranslationResponse>> call = translateAPI.createTranslation(3.0, languageCode, inputTextList);
 
         call.enqueue(new Callback<List<TranslationResponse>>() {
             @Override

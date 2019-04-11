@@ -20,16 +20,13 @@ public interface TranslateAPI {
 //                                             @Query("to") String languageCode);
 //
 
-//    @Query("api-version") String version,
-//    @Query("to") String languageCode,
-
     String apikey = BuildConfig.api_key;
     @Headers({
            "Ocp-Apim-Subscription-Key: " + apikey,
             "Content-type: application/json"
     })
     @POST("translate")
-    Call<List<TranslationResponse>> createTranslation(    @Query("api-version") double version,
+    Call<List<TranslationResponse>> createTranslation(@Query("api-version") double version,
                                                       @Query("to") String languageCode,
                                                       @Body List<InputText> textToTranslate);
 

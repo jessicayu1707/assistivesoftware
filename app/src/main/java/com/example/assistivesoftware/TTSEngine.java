@@ -18,6 +18,11 @@ public class TTSEngine {
 
     private Locale loc = Locale.UK;
 
+    public void changeLocale(String languageCode){
+        Locale locale = new Locale(languageCode);
+        loc = locale;
+    }
+
     public void init(Context context) {
         try {
             tts = new TextToSpeech(context, onInitListener);
@@ -59,5 +64,6 @@ public class TTSEngine {
         else
             Log.e("error", "TTS Not Initialized");
     }
+
 
 }
