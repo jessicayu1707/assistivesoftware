@@ -36,7 +36,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private TranslateAPI translateAPI;
     private TextView translatedText;
 
-    private String languageCode = "yue-Hant-HK";
+    private String googleCode = "en-GB";
+    private String bingCode = "en";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,16 +58,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         spinner.setAdapter(aa);
 
 
-
         ///////TTSEngine/////////
         tts = new TTSEngine();
-        tts.changeLocale(languageCode);
+        tts.changeLocale(googleCode);
         tts.init(this);
         Button testButton = findViewById(R.id.btnTTSEngine);
         testButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tts.talk("你好吗？我是余君儿!");
+                tts.talk("你好吗？我是余君儿! ... Hello What is cheese?");
             }
         });
 
@@ -87,22 +87,18 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         translateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createTranslation("three eggs", "zh-Hans");
+                createTranslation("three eggs", bingCode);
             }
         });
-
-
-
-        //settingLanguage(languageCode);
-        Intent intent = new Intent(MainActivity.this, MyAccessibilityService.class);
-        intent.putExtra("language_code", languageCode);
-        startService(intent);
 
     }
 
     //saving the string languageCode for intended language to use across activities
-    public void settingLanguage(String languageCode){
-
+    public void settingLanguage(String googleCode, String bingCode){
+        Intent intent = new Intent(MainActivity.this, MyAccessibilityService.class);
+        intent.putExtra("google_code", googleCode);
+        intent.putExtra("bing_code", bingCode);
+        startService(intent);
     }
 
     private void createTranslation(String text, String languageCode) {
@@ -153,14 +149,18 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
     //Performing action onItemSelected and onNothing selected
+    String selectedLanguage = "Korean";
     @Override
     public void onItemSelected(AdapterView<?> arg0, View arg1, int position,long id) {
         //make array from language array in resources
         String[] language_array = getResources().getStringArray(R.array.language_array);
-        String text = language_array[position];
+        selectedLanguage = language_array[position];
+        LanguageCode languageCode = new LanguageCode(selectedLanguage);
+        googleCode = languageCode.getGoogleCode();
+        bingCode = languageCode.getBingCode();
+        settingLanguage(googleCode, bingCode);
         TextView textView = findViewById(R.id.textView);
-        textView.setText(text); //set text for text view
-
+        textView.setText(selectedLanguage); //set text for text view
     }
 
     @Override
@@ -168,6 +168,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 // TODO Auto-generated method stub
 
     }
+
+//    //method to get language codes
+//    private void getLanguageCodes() {
+//       LanguageCode languageCode = new LanguageCode(selectedLanguage);
+//       googleCode = languageCode.getGoogleCode();
+//       bingCode = languageCode.getBingCode();
+//    }
+
 
     //called when "Check" is clicked
     //check for the presence of the TTS resources with the corresponding intent

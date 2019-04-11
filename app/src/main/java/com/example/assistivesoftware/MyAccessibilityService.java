@@ -17,6 +17,15 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class MyAccessibilityService extends AccessibilityService {
 
 
@@ -24,11 +33,15 @@ public class MyAccessibilityService extends AccessibilityService {
     FrameLayout ll;
 
     TTSEngine tts = null;
+    private TranslateAPI translateAPI;
 
-    private String languageCode;
+    private String googleCode;
+    private String bingCode;
 
     public int onStartCommand (Intent intent, int flags, int startId){
-        languageCode = intent.getStringExtra("language_code");
+        googleCode = intent.getStringExtra("google_code");
+        bingCode = intent.getStringExtra("bing_code");
+
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -40,9 +53,15 @@ public class MyAccessibilityService extends AccessibilityService {
         //creating a new tts engine
         //initialising the tts
         tts = new TTSEngine();
-        tts.changeLocale(languageCode);
+        tts.changeLocale(googleCode);
         tts.init(this);
 
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.cognitive.microsofttranslator.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        translateAPI = retrofit.create(TranslateAPI.class);
 
         AccessibilityServiceInfo info = new AccessibilityServiceInfo();
         // Set the type of events that this service wants to listen to. Others won't be passed to this service.
@@ -158,17 +177,49 @@ public class MyAccessibilityService extends AccessibilityService {
             case AccessibilityEvent.TYPE_VIEW_FOCUSED:
                 eventText = "Focused on";
                 break;
-
-//            case AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED:
-//                eventText = source.getText().toString();
-//                break;
         }
 
         eventText = eventText + event.getText().toString();
-        Toast.makeText(getApplicationContext(), eventText, Toast.LENGTH_LONG).show();
+        createTranslation(eventText, bingCode);
+        Toast.makeText(getApplicationContext(), translatedText, Toast.LENGTH_LONG).show();
 
         //add text to tts queue
-        tts.addTalk(eventText);
+        tts.addTalk(translatedText);
+
+
+    }
+
+    private String translatedText;
+    private void createTranslation(String text, String languageCode) {
+
+        final InputText inputText = new InputText(text);
+        List<InputText> inputTextList = new ArrayList<>();
+        inputTextList.add(inputText);
+
+        Call<List<TranslationResponse>> call = translateAPI.createTranslation(3.0, languageCode, inputTextList);
+
+        call.enqueue(new Callback<List<TranslationResponse>>() {
+            @Override
+            public void onResponse(Call<List<TranslationResponse>> call, Response<List<TranslationResponse>> response) {
+
+                if(!response.isSuccessful()){
+                    translatedText = "Failed :( Code: " + response.code();
+                    return;
+                }
+
+                List<TranslationResponse> translationResponse = response.body();
+
+                String output = translationResponse.get(0).getTranslations().get(0).getText();
+
+                translatedText = output;
+
+            }
+
+            @Override
+            public void onFailure(Call<List<TranslationResponse>> call, Throwable t) {
+                translatedText = t.getMessage();
+            }
+        });
 
     }
 
