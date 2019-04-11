@@ -131,3 +131,5 @@ public class FloatingWindow extends Service {
 
     }
 }
+
+//Some code referenced from Youtube, Stack Overflow, Supporting Documentation, etc.

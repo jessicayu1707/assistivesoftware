@@ -1,8 +1,12 @@
 <resources>
     <string name="app_name">Assistive Software</string>
-    <string name="button_check">Check</string>
-    <string name="button_speak">Speak</string>
+    <string name="description">Hello! This is an Accessibility Service.
+
+    This is a screen reader which will translate what is on the screen and read it out loud.
+
+    To get started you can pick an output language from the dropdown menu.
+    Then go to Settings > Accessibility > Assistive Software > Turn ON.
+    Now you can click and your actions will be read out to you.</string>
+
     <string name="text_view">Hello World!</string>
-    <string name="button_ttsengine">TTS Engine Test</string>
-    <string name="button_testTranslate">Translate Test</string>
 </resources>
