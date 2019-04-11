@@ -2,7 +2,6 @@ package com.example.assistivesoftware;
 
 import com.google.gson.annotations.SerializedName;
 
-//Java object representation of input for translation api
 public class InputText {
 
     @SerializedName("Text")
@@ -16,7 +15,7 @@ public class InputText {
         return text;
     }
 
-    public void setText(String text) { this.text = text; }
+    public void setText(String text) {
+        this.text = text;
+    }
 }
-
-//Some code referenced from Youtube, Stack Overflow, Documentation, etc.

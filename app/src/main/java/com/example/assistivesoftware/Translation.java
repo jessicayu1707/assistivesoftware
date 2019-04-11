@@ -3,7 +3,6 @@ package com.example.assistivesoftware;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-//Java object to represent a translation object
 public class Translation {
 
     //A string giving the translated text.
@@ -29,6 +28,3 @@ public class Translation {
     }
 
 }
-
-
-//Some code referenced from Youtube, Stack Overflow, Documentation, etc.

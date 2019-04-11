@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -26,6 +27,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MyAccessibilityService extends AccessibilityService {
+
 
 
     FrameLayout ll;
@@ -226,6 +228,3 @@ public class MyAccessibilityService extends AccessibilityService {
 
     }
 }
-
-
-//Some code referenced from Youtube, Stack Overflow, Supporting Documentation, etc.
