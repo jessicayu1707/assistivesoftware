@@ -1,7 +1,6 @@
 package com.example.assistivesoftware;
 
-import android.widget.Switch;
-
+//to return the required language codes
 public class LanguageCode {
 
     private String language;
@@ -86,8 +85,5 @@ public class LanguageCode {
 
         return bingCode;
     }
-
-
-
 
 }

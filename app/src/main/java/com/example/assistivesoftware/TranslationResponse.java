@@ -5,6 +5,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+//Java object representation of JSON response from Microsoft Translate
+//helps to easier parse response with retrofit
 public class TranslationResponse {
 
     @SerializedName("detectedLanguages")
@@ -28,3 +30,5 @@ public class TranslationResponse {
     }
 
 }
+
+//Some code referenced from Youtube, Stack Overflow, Documentation, etc.

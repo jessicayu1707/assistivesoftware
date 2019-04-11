@@ -3,6 +3,7 @@ package com.example.assistivesoftware;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+//Java object representation for detected language object
 class DetectedLanguage {
 
     @SerializedName("language")
@@ -26,3 +27,5 @@ class DetectedLanguage {
     }
 
 }
+
+//Some code referenced from Youtube, Stack Overflow, Documentation, etc.
